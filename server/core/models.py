@@ -1,8 +1,10 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from .tasks import generate_picture
 
 
 class Function(models.Model):
+    f_id = models.AutoField(primary_key=True)
     statement = models.CharField(max_length=128, verbose_name='Функция')
     dt = models.IntegerField(verbose_name='Шаг t, часы')
     interval = models.IntegerField(verbose_name='Интервал t, дней')
@@ -15,3 +17,7 @@ class Function(models.Model):
     class Meta:
         verbose_name = _('функцию')
         verbose_name_plural = _('функции')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.image = generate_picture(self.statement, self.dt, self.interval, self.f_id)

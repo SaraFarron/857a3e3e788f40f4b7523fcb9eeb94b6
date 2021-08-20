@@ -1,5 +1,4 @@
 from celery import shared_task
-from .models import Function
 from io import StringIO
 import matplotlib.pyplot as plt
 import numpy as np
@@ -42,29 +41,13 @@ def string2func(string):
     return func
 
 
-@shared_task
-def add(x, y):
-    return x + y
-
-
-@shared_task
-def mul(x, y):
-    return x * y
-
-
-@shared_task
-def xsum(numbers):
-    return sum(numbers)
-
-
-@shared_task
-def generate_picture(statement, dt, interval, id):
+@shared_task()
+def generate_picture(statement, dt, interval):
     x = np.linspace(datetime.now() - interval, datetime.now().day, num=dt*interval)
-    y = [string2func(statement) for t in x]
+    y = [string2func(statement)(t) for t in x]
     plt.plot(x, y)
     image = StringIO()
     plt.savefig(image)
-    f = Function.objects.get(id=id)
-    f.graph = image  # or return image?
+    return image
 
 # чтобы селери делал то что написано в таске надо добавить к команде --pool=solo
