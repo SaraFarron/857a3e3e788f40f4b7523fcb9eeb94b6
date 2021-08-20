@@ -1,5 +1,5 @@
 from celery import shared_task
-from io import StringIO
+from io import BytesIO
 import matplotlib.pyplot as plt
 import numpy as np
 import re
@@ -43,10 +43,10 @@ def string2func(string):
 
 @shared_task()
 def generate_picture(statement, dt, interval):
-    x = np.linspace(datetime.now() - interval, datetime.now().day, num=dt*interval)
+    x = np.linspace(datetime.now().day - interval, datetime.now().day, num=dt*interval)
     y = [string2func(statement)(t) for t in x]
     plt.plot(x, y)
-    image = StringIO()
+    image = BytesIO()
     plt.savefig(image)
     return image
 
