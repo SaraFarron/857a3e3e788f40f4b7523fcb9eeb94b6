@@ -17,7 +17,6 @@ class Function(models.Model):
         verbose_name = _('функцию')
         verbose_name_plural = _('функции')
 
-    # переписать через save(), init запускается перед заполнением полей в админке
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.image = generate_picture(self.statement, self.dt, self.interval)
+    def save(self, *args, **kwargs):
+        self.image = generate_picture.delay(self.statement, self.dt, self.interval)
+        super(Function, self).save(*args, **kwargs)
