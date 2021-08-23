@@ -55,8 +55,10 @@ def generate_picture(statement, dt, interval, func_id):
     while not Function.objects.filter(id=func_id):
         sleep(1)
         print(f'id = {func_id}, dt = {dt}, statement = {statement}, interval = {interval}')
+        print(picture)
     else:
-        Function.objects.get(id=func_id).update(graph=picture)
+        # func = Function.objects.get(id=func_id)
+        # func.graph = picture
+        # func.save(True)
 
-
-# чтобы селери делал то что написано в таске надо добавить к команде --pool=solo
+        Function.objects.get(id=func_id).graph.save(f'{func_id}', picture)  # does not work

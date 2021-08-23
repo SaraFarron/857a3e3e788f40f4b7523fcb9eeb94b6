@@ -3,7 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class Function(models.Model):
-    id = models.AutoField(primary_key=True)
     statement = models.CharField(max_length=128, verbose_name='Функция')
     dt = models.IntegerField(verbose_name='Шаг t, часы')
     interval = models.IntegerField(verbose_name='Интервал t, дней')
@@ -17,8 +16,8 @@ class Function(models.Model):
         verbose_name = _('функцию')
         verbose_name_plural = _('функции')
 
-    def save(self, *args, **kwargs):  # if need_generation: generate_picture...
-        from .tasks import generate_picture
-
+    def save(self, *args, **kwargs):
         super(Function, self).save(*args, **kwargs)
-        generate_picture.delay(self.statement, self.dt, self.interval, self.id)
+        if not args:
+            from .tasks import generate_picture
+            generate_picture.delay(self.statement, self.dt, self.interval, self.id)
