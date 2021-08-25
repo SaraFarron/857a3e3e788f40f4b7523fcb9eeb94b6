@@ -18,7 +18,7 @@ replacements = {
 }
 
 allowed_words = [
-    'x',
+    't',
     'sin',
     'cos',
     'sqrt',
@@ -32,13 +32,13 @@ def string2func(string):
     for word in re.findall('[a-zA-Z_]+', string):
         if word not in allowed_words:
             raise ValueError(
-                f'{word} is forbidden to use in math expression'
-            )
+                f'Запрещено использовать {word} в выражениях, в качестве переменной используйте t'
+            )  # Для безопасности т.к. далее используется eval()
 
     for old, new in replacements.items():
         string = string.replace(old, new)
 
-    def func(x):
+    def func(t):
         return eval(string)
 
     return func
@@ -49,7 +49,7 @@ def generate_picture(func_id):
     """ Генерация изображения и добавление в function.graph """
 
     while not Function.objects.filter(id=func_id):
-        sleep(1)  # На случай если изображение не успело сгенерироваться, но обычно не требуется
+        sleep(1)  # На всякий случай, но обычно не требуется
 
     else:
         func = Function.objects.get(id=func_id)
@@ -63,5 +63,6 @@ def generate_picture(func_id):
             image = BytesIO()
             plt.savefig(image, format='png')
             picture = ImageFile(image)
+            plt.close()
             func.graph.save(f'{func_id}', picture)
             func.creation_date = datetime.now()
