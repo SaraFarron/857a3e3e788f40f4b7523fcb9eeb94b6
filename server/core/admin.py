@@ -9,5 +9,7 @@ def update_functions(modeladmin, request, queryset):
 
 @admin.register(Function)
 class FunctionAdmin(admin.ModelAdmin):
-    list_display = ('statement', 'graph', 'interval', 'dt', 'creation_date')
+    list_display = ('statement', 'image_tag', 'interval', 'dt', 'creation_date')
     actions = [update_functions]
+    # fields = ('image_tag', )
+    readonly_fields = ('image_tag', )

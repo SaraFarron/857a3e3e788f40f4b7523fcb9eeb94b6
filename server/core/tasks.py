@@ -45,20 +45,23 @@ def string2func(string):
 
 
 @shared_task()
-def generate_picture(statement, dt, interval, func_id):
-    x = np.linspace(datetime.now().day - interval, datetime.now().day, num=dt*interval)
-    y = [string2func(statement)(t) for t in x]
-    plt.plot(x, y)
-    image = BytesIO()
-    plt.savefig(image, format='png')
-    picture = ImageFile(image)
-    while not Function.objects.filter(id=func_id):
-        sleep(1)
-        print(f'id = {func_id}, dt = {dt}, statement = {statement}, interval = {interval}')
-        print(picture)
-    else:
-        # func = Function.objects.get(id=func_id)
-        # func.graph = picture
-        # func.save(True)
+def generate_picture(func_id):
+    """ Генерация изображения и добавление в function.graph """
 
-        Function.objects.get(id=func_id).graph.save(f'{func_id}', picture)  # does not work
+    while not Function.objects.filter(id=func_id):
+        sleep(1)  # На случай если изображение не успело сгенерироваться, но обычно не требуется
+
+    else:
+        func = Function.objects.get(id=func_id)
+
+        if not func.graph:  # Чтобы избежать вечного цикла
+            statement, dt, interval = func.statement, func.dt, func.interval
+
+            x = np.linspace(datetime.now().day - interval, datetime.now().day, num=dt*interval)
+            y = [string2func(statement)(t) for t in x]
+            plt.plot(x, y)
+            image = BytesIO()
+            plt.savefig(image, format='png')
+            picture = ImageFile(image)
+            func.graph.save(f'{func_id}', picture)
+            func.creation_date = datetime.now()
