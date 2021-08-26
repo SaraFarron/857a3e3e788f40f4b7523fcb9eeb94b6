@@ -25,5 +25,14 @@ services:
     image: redis
     ports:
       - "6379:6379"
+#  celery: TODO
+#    build: .
+#    command:
+#      - celery -A server worker -l INFO
+#    volumes:
+#      - .:/usr/src/server/
+#    depends_on:
+#      - redis
+#      - db
 volumes:
   postgres_data:
