@@ -1,7 +1,7 @@
 ## Установка / Installation
 
     git clone ...
-    cd 857a3e3e788f40f4b7523fcb9eeb94b
+    cd 857a3e3e788f40f4b7523fcb9eeb94b/server
     docker-compose build
 
 ## Запуск / Launch
