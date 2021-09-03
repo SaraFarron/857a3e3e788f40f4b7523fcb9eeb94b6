@@ -4,7 +4,7 @@
     cd 857a3e3e788f40f4b7523fcb9eeb94b
     docker-compose build
 
-## Запуск / Launch
+## Запуск / Run
 
     docker-compose up
 
