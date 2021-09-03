@@ -10,5 +10,3 @@ COPY requirements.txt /usr/src/server/requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . /usr/src/server/
-
-ENTRYPOINT ["/usr/src/server/entrypoint.sh"]
