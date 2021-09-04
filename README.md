@@ -8,6 +8,10 @@
 
     docker-compose up
 
+## URL
+
+    http://localhost:8000/admin/
+
 ## Текущий статус проекта / Present state of this project
 
 На данный момент проект соответствует заданию ниже на 90%. Отсутствует RabbitMQ и нет обновления времени обработки
