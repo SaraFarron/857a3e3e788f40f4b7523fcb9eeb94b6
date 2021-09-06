@@ -20,13 +20,3 @@ app.autodiscover_tasks()
 @app.task(bind=True)
 def debug_task(self):
     print(f'Request: {self.request!r}')
-
-
-# Необходим pip install django-celery-beat и django_celery_beat в INSTALLED_APPS
-# запуск та же команда селери только worker -> beat, потом в новой панеле worker
-# app.conf.beat_schedule = {
-#     'creaating-new-image': {
-#         'task': 'core.tasks.function',
-#         'schedule': 15.0
-#     }
-# }
